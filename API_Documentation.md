@@ -30,6 +30,37 @@ Authorization: Bearer <token>
 ### User Management (requires JWT token)
 
 **Get Current User**
+
+### Product Management (requires JWT token)
+
+**Get All Products**
+- `GET /api/products`
+- Response: Array of all products
+
+**Get Product By ID**
+- `GET /api/products/{id}`
+- Response: Single product data
+
+**Create Product**
+- `POST /api/products`
+- Admin only
+- Request body: `{"name":"Product Name","description":"Description","price":19.99,"stock":100,"imageUrl":"https://example.com/image.jpg"}`
+- Response: Created product data
+
+**Update Product**
+- `PUT /api/products/{id}`
+- Admin only
+- Request body: Product update data
+- Response: Updated product data
+
+**Delete Product**
+- `DELETE /api/products/{id}`
+- Admin only
+- Response: `{"message":"Product deleted successfully"}`
+
+### User Management (requires JWT token)
+
+**Get Current User**
 - `GET /api/users/profile`
 - Response: User profile data
 

@@ -25,7 +25,7 @@ public class UserController {
 
     private final UserService userService;
 
-    // Get all users (admin onlyhjhj)
+    // Get all users (admin only)
 
     @GetMapping("/all")
     @PreAuthorize("hasRole('ADMIN')")
