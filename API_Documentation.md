@@ -35,27 +35,29 @@ Authorization: Bearer <token>
 
 **Get All Products**
 - `GET /api/products`
+- Available to all authenticated users (SELLER and ADMIN)
 - Response: Array of all products
 
 **Get Product By ID**
 - `GET /api/products/{id}`
+- Available to all authenticated users (SELLER and ADMIN)
 - Response: Single product data
 
 **Create Product**
 - `POST /api/products`
-- Admin only
+- Available to all authenticated users (SELLER and ADMIN can create their own products)
 - Request body: `{"name":"Product Name","description":"Description","price":19.99,"stock":100,"imageUrl":"https://example.com/image.jpg"}`
 - Response: Created product data
 
 **Update Product**
 - `PUT /api/products/{id}`
-- Admin only
+- Admin can update all products, SELLER can update only their own products
 - Request body: Product update data
 - Response: Updated product data
 
 **Delete Product**
 - `DELETE /api/products/{id}`
-- Admin only
+- Admin can delete all products, SELLER can delete only their own products
 - Response: `{"message":"Product deleted successfully"}`
 
 ### User Management (requires JWT token)

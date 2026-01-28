@@ -41,9 +41,8 @@ public class ProductController {
         }
     }
 
-    // Create product - admin only
+    // Create product - any authenticated user can create their own products
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> createProduct(@Valid @RequestBody ProductRequest request) {
         try {
             ProductResponse product = productService.createProduct(request);
@@ -53,9 +52,8 @@ public class ProductController {
         }
     }
 
-    // Update product - admin only
+    // Update product - admin can update all products, sellers can update only their own products
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateProduct(
             @PathVariable Long id,
             @Valid @RequestBody ProductRequest request) {
@@ -67,9 +65,8 @@ public class ProductController {
         }
     }
 
-    // Delete product - admin only
+    // Delete product - admin can delete all products, sellers can delete only their own products
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteProduct(@PathVariable Long id) {
         try {
             productService.deleteProduct(id);
