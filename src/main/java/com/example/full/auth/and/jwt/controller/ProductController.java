@@ -30,6 +30,14 @@ public class ProductController {
         return ResponseEntity.ok(products);
     }
 
+    // Get products of the current authenticated user (seller)
+    @GetMapping("/my")
+    public ResponseEntity<List<ProductResponse>> getMyProducts() {
+        List<ProductResponse> products = productService.getMyProducts();
+        return ResponseEntity.ok(products);
+    }
+
+
     // Get product by ID - available to all authenticated users
     @GetMapping("/{id}")
     public ResponseEntity<?> getProductById(@PathVariable Long id) {
@@ -75,4 +83,5 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", e.getMessage()));
         }
     }
+
 }

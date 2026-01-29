@@ -30,6 +30,21 @@ public class ProductService {
     }
 
     /**
+     * Get products of current logged-in user (seller)
+     */
+    public List<ProductResponse> getMyProducts() {
+        // 1) نجيب المستخدم الحالي من الـSecurityContext
+        User currentUser = getCurrentUser();
+
+        // 2) نجيب المنتجات اللي seller بتاعها = currentUser
+        return productRepository.findBySeller(currentUser).stream()
+                // 3) نحول كل Product إلى ProductResponse (عندك الميثود convertToProductResponse)
+                .map(this::convertToProductResponse)
+                .collect(Collectors.toList());
+    }
+
+
+    /**
      * Get product by ID - available to all authenticated users (they can see all products)
      */
     public ProductResponse getProductById(Long id) {
