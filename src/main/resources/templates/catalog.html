@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Catalog</title>
+  <link rel="stylesheet" th:href="@{/css/app.css}"/>
+</head>
+<body>
+<div th:replace="~{fragments/nav :: navbar}"></div>
+<main>
+  <h1>Catalog</h1>
+  <div class="flash ok" th:if="${message}" th:text="${message}"></div>
+
+  <form class="search-panel" th:action="@{/catalog}" method="get">
+    <div class="row">
+      <label>Name</label>
+      <input type="text" name="name" th:value="${name}"/>
+    </div>
+    <div class="row">
+      <label>Category (exact name)</label>
+      <input type="text" name="category" th:value="${category}"/>
+    </div>
+    <div class="row">
+      <label>Min price</label>
+      <input type="number" step="0.01" name="minPrice" th:value="${minPrice}"/>
+    </div>
+    <div class="row">
+      <label>Max price</label>
+      <input type="number" step="0.01" name="maxPrice" th:value="${maxPrice}"/>
+    </div>
+    <div class="row">
+      <label><input type="checkbox" name="inStock" value="true" th:checked="${inStock}"/> In stock only</label>
+    </div>
+    <button class="btn" type="submit">Search</button>
+    <a class="btn secondary" th:href="@{/catalog}" style="margin-left:0.5rem;">Reset</a>
+  </form>
+
+  <div class="grid">
+    <article class="card" th:each="p : ${products.content}">
+      <h2><a th:href="@{/product/{id}(id=${p.id})}" th:text="${p.name}">Name</a></h2>
+      <div class="price" th:text="${p.price} + ' USD'">0</div>
+      <div class="meta" th:text="${p.categoryName}">Cat</div>
+      <div class="meta" th:text="'Stock: ' + ${p.stock}">Stock</div>
+    </article>
+  </div>
+
+  <div class="pager" th:if="${products.totalPages > 1 && !searchMode}">
+    <a class="btn secondary small" th:if="${products.hasPrevious()}"
+       th:href="@{/catalog(page=${products.number - 1})}">Previous</a>
+    <span class="meta"
+          th:text="'Page ' + ${products.number + 1} + ' / ' + ${products.totalPages}">Page</span>
+    <a class="btn secondary small" th:if="${products.hasNext()}"
+       th:href="@{/catalog(page=${products.number + 1})}">Next</a>
+  </div>
+  <p class="meta" th:if="${products.isEmpty()}">No products found.</p>
+</main>
+</body>
+</html>

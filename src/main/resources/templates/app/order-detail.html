@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Order</title>
+  <link rel="stylesheet" th:href="@{/css/app.css}"/>
+</head>
+<body>
+<div th:replace="~{fragments/nav :: navbar}"></div>
+<main>
+  <p class="meta"><a th:href="@{/app/orders}">← Orders</a></p>
+  <h1 th:text="'Order #' + ${order.id}">Order</h1>
+  <div class="flash ok" th:if="${message}" th:text="${message}"></div>
+  <div class="flash err" th:if="${error}" th:text="${error}"></div>
+
+  <div class="card" style="margin-bottom:1rem;">
+    <p><strong>Total:</strong> <span th:text="${order.totalAmount}"></span></p>
+    <p><strong>Status:</strong> <span th:text="${order.status}"></span></p>
+    <p><strong>Ship to:</strong> <span th:text="${order.shippingAddress}"></span></p>
+    <p><strong>Placed:</strong> <span th:text="${order.createdAt}"></span></p>
+  </div>
+
+  <h2>Items</h2>
+  <div class="table-wrap" th:if="${order.items != null && !order.items.isEmpty()}">
+    <table>
+      <thead>
+      <tr>
+        <th>Product</th>
+        <th>Price</th>
+        <th>Qty</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="it : ${order.items}">
+        <td th:text="${it.productName}"></td>
+        <td th:text="${it.productPrice}"></td>
+        <td th:text="${it.quantity}"></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <form th:action="@{/app/orders/{id}/cancel(id=${order.id})}" method="post"
+        th:if="${order.status.name() != 'CANCELLED'}"
+        onsubmit="return confirm('Cancel this order?');" style="margin-top:1rem;">
+    <button class="btn danger" type="submit">Cancel order</button>
+  </form>
+</main>
+</body>
+</html>

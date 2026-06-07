@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Categories</title>
+  <link rel="stylesheet" th:href="@{/css/app.css}"/>
+</head>
+<body>
+<div th:replace="~{fragments/nav :: navbar}"></div>
+<main>
+  <h1>Categories</h1>
+  <div class="flash ok" th:if="${message}" th:text="${message}"></div>
+  <div class="flash err" th:if="${error}" th:text="${error}"></div>
+  <p><a class="btn" th:href="@{/app/admin/categories/new}">New category</a></p>
+
+  <div class="table-wrap" th:if="${!categories.isEmpty()}">
+    <table>
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="c : ${categories.content}">
+        <td th:text="${c.id}"></td>
+        <td th:text="${c.name}"></td>
+        <td th:text="${c.description}"></td>
+        <td>
+          <a class="btn secondary small" th:href="@{/app/admin/categories/{id}/edit(id=${c.id})}">Edit</a>
+          <form class="inline" th:action="@{/app/admin/categories/{id}/delete(id=${c.id})}" method="post"
+                onsubmit="return confirm('Delete category?');">
+            <button class="btn danger small" type="submit">Delete</button>
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</main>
+</body>
+</html>

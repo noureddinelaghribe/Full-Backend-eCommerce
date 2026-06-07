@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title th:text="${product.name}">Product</title>
+  <link rel="stylesheet" th:href="@{/css/app.css}"/>
+</head>
+<body>
+<div th:replace="~{fragments/nav :: navbar}"></div>
+<main>
+  <p class="meta"><a th:href="@{/catalog}">← Catalog</a></p>
+  <h1 th:text="${product.name}">Product</h1>
+  <p class="price" th:text="${product.price} + ' USD'"></p>
+  <p th:text="${product.description}">Description</p>
+  <p class="meta" th:text="'Seller: ' + ${product.sellerName}"></p>
+  <p class="meta" th:text="'Category: ' + ${product.categoryName}"></p>
+  <p class="meta" th:text="'Stock: ' + ${product.stock}"></p>
+  <p class="meta" th:if="${product.status != null}" th:text="'Status: ' + ${product.status}"></p>
+
+  <div th:if="${currentUser != null}">
+    <form th:action="@{/app/cart/add}" method="post" style="margin-top:1rem;">
+      <input type="hidden" name="productId" th:value="${product.id}"/>
+      <button class="btn" type="submit">Add to cart</button>
+    </form>
+  </div>
+  <p class="meta" th:if="${currentUser == null}">
+    <a th:href="@{/login}">Login</a> to add this product to your cart.
+  </p>
+</main>
+</body>
+</html>

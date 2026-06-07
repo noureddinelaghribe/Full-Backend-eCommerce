@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Shop</title>
+  <link rel="stylesheet" th:href="@{/css/app.css}"/>
+</head>
+<body>
+<div th:replace="~{fragments/nav :: navbar}"></div>
+<main>
+  <h1>Welcome</h1>
+  <p class="meta">Browse the catalog, manage your cart, addresses, and orders. Sellers can list products; admins manage users and categories.</p>
+  <p><a class="btn" th:href="@{/catalog}">Go to catalog</a></p>
+</main>
+</body>
+</html>

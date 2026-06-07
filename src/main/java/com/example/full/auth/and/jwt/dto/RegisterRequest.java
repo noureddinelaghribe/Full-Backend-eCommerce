@@ -1,5 +1,6 @@
 package com.example.full.auth.and.jwt.dto;
 
+import com.example.full.auth.and.jwt.model.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -62,5 +63,5 @@ public class RegisterRequest {
      * 🎭 دور المستخدم
      * - اختياري، القيمة الافتراضية: USER
      */
-    private String role = "USER";
+    private Role role = Role.ROLE_BUYER;
 }

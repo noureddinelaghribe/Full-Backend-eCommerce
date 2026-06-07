@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Cart</title>
+  <link rel="stylesheet" th:href="@{/css/app.css}"/>
+</head>
+<body>
+<div th:replace="~{fragments/nav :: navbar}"></div>
+<main>
+  <h1>Your cart</h1>
+  <div class="flash ok" th:if="${message}" th:text="${message}"></div>
+  <div class="flash err" th:if="${error}" th:text="${error}"></div>
+
+  <div class="table-wrap" th:if="${!cartPage.isEmpty()}">
+    <table>
+      <thead>
+      <tr>
+        <th>Product</th>
+        <th>Price</th>
+        <th>Qty</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="line : ${cartPage.content}">
+        <td>
+          <a th:href="@{/product/{id}(id=${line.product.id})}" th:text="${line.product.name}">P</a>
+        </td>
+        <td th:text="${line.product.price}">0</td>
+        <td th:text="${line.quantity}">1</td>
+        <td>
+          <form class="inline" th:action="@{/app/cart/decrease/{id}(id=${line.id})}" method="post">
+            <button class="btn secondary small" type="submit">−</button>
+          </form>
+          <form class="inline" th:action="@{/app/cart/increase/{id}(id=${line.id})}" method="post">
+            <button class="btn secondary small" type="submit">+</button>
+          </form>
+          <form class="inline" th:action="@{/app/cart/remove/{id}(id=${line.id})}" method="post">
+            <button class="btn danger small" type="submit">Remove</button>
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="meta" th:if="${cartPage.isEmpty()}">Your cart is empty.</p>
+
+  <div style="margin-top:1rem;display:flex;gap:0.5rem;flex-wrap:wrap;" th:if="${!cartPage.isEmpty()}">
+    <form th:action="@{/app/orders/new}" method="post">
+      <button class="btn" type="submit">Place order</button>
+    </form>
+    <form th:action="@{/app/cart/clear}" method="post" onsubmit="return confirm('Clear entire cart?');">
+      <button class="btn secondary" type="submit">Clear cart</button>
+    </form>
+  </div>
+  <p class="meta" style="margin-top:1rem;">Orders use your <a th:href="@{/app/addresses}">default address</a>.</p>
+</main>
+</body>
+</html>

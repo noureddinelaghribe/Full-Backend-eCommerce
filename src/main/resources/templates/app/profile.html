@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Profile</title>
+  <link rel="stylesheet" th:href="@{/css/app.css}"/>
+</head>
+<body>
+<div th:replace="~{fragments/nav :: navbar}"></div>
+<main>
+  <h1>Profile</h1>
+  <div class="flash ok" th:if="${message}" th:text="${message}"></div>
+  <div class="flash err" th:if="${error}" th:text="${error}"></div>
+
+  <div class="card" style="margin-bottom:1.5rem;">
+    <p><strong>Email:</strong> <span th:text="${user.email}"></span></p>
+    <p><strong>Name:</strong> <span th:text="${user.fullName}"></span></p>
+    <p><strong>Phone:</strong> <span th:text="${user.phoneNumber}"></span></p>
+    <p><strong>Role:</strong> <span th:text="${user.role}"></span></p>
+  </div>
+
+  <h2>Update details</h2>
+  <form th:action="@{/app/profile}" method="post" class="card" style="max-width:480px;padding:1.25rem;">
+    <div class="row">
+      <label for="email">Email</label>
+      <input id="email" type="email" name="email" th:value="${user.email}"/>
+    </div>
+    <div class="row">
+      <label for="fullName">Full name</label>
+      <input id="fullName" type="text" name="fullName" th:value="${user.fullName}"/>
+    </div>
+    <div class="row">
+      <label for="phoneNumber">Phone</label>
+      <input id="phoneNumber" type="text" name="phoneNumber" th:value="${user.phoneNumber}"/>
+    </div>
+    <p class="meta" th:if="${isAdmin}">Admins may also change role and enabled flag via API.</p>
+    <button class="btn" type="submit">Save</button>
+  </form>
+</main>
+</body>
+</html>

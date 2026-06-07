@@ -4,6 +4,7 @@ import com.example.full.auth.and.jwt.config.JwtUtil;
 import com.example.full.auth.and.jwt.dto.AuthResponse;
 import com.example.full.auth.and.jwt.dto.LoginRequest;
 import com.example.full.auth.and.jwt.dto.RegisterRequest;
+import com.example.full.auth.and.jwt.model.Role;
 import com.example.full.auth.and.jwt.model.User;
 import com.example.full.auth.and.jwt.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -69,7 +70,7 @@ public class AuthService {
         user.setPassword(encodedPassword); // 🔐 تشفير كلمة المرور
         user.setFullName(request.getFullName());
         user.setPhoneNumber(request.getPhoneNumber());
-        user.setRole(request.getRole() != null ? request.getRole() : "USER");
+        user.setRole(request.getRole() != null ? request.getRole() : Role.ROLE_BUYER);
         user.setEnabled(true);
         user.setCreatedAt(LocalDateTime.now());
 

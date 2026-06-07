@@ -1,5 +1,6 @@
 package com.example.full.auth.and.jwt.dto;
 
+import com.example.full.auth.and.jwt.model.ProductStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,5 +24,10 @@ public class ProductResponse {
     private Integer stock;
     private String imageUrl;
     private Long sellerId;
+    private ProductStatus status;
     private String sellerName;
+    private Long categoryId;
+    private String categoryName;
+    private boolean deleted;
+
 }

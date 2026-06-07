@@ -6,6 +6,20 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * 🛒 كيان السلة (Cart)
+ *
+ * الوصف:
+ * - يمثل عنصر واحد داخل سلة المستخدم
+ * - يربط بين المستخدم (User) والمنتج (Product)
+ * - يحتوي على كمية المنتج داخل السلة
+ *
+ * الحقول الرئيسية:
+ * - id: المعرف الفريد لعنصر السلة
+ * - quantity: الكمية المطلوبة من المنتج
+ * - user: المستخدم صاحب هذه السلة
+ * - product: المنتج المضاف إلى السلة
+ */
 @Entity
 @Table(name = "carts")
 @Data

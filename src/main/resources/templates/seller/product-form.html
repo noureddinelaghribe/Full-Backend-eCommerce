@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title th:text="${isEdit} ? 'Edit product' : 'New product'">Product</title>
+  <link rel="stylesheet" th:href="@{/css/app.css}"/>
+</head>
+<body>
+<div th:replace="~{fragments/nav :: navbar}"></div>
+<main>
+  <h1 th:text="${isEdit} ? 'Edit product' : 'New product'">Product</h1>
+  <p class="meta"><a th:href="@{/app/seller/products}">← Back</a></p>
+
+  <form th:if="${!isEdit}" th:action="@{/app/seller/products}" th:object="${productForm}" method="post" class="card" style="max-width:520px;padding:1.25rem;">
+    <div class="row">
+      <label>Name</label>
+      <input type="text" th:field="*{name}" required/>
+    </div>
+    <div class="row">
+      <label>Description</label>
+      <textarea th:field="*{description}" rows="3"></textarea>
+    </div>
+    <div class="row">
+      <label>Price</label>
+      <input type="number" step="0.01" min="0" th:field="*{price}" required/>
+    </div>
+    <div class="row">
+      <label>Stock</label>
+      <input type="number" min="0" th:field="*{stock}" required/>
+    </div>
+    <div class="row">
+      <label>Category</label>
+      <select th:field="*{categoryId}" required>
+        <option th:each="c : ${categories.content}" th:value="${c.id}" th:text="${c.name}"></option>
+      </select>
+    </div>
+    <div class="row">
+      <label>Image URL</label>
+      <input type="text" th:field="*{imageUrl}"/>
+    </div>
+    <button class="btn" type="submit">Create</button>
+  </form>
+
+  <form th:if="${isEdit}" th:action="@{/app/seller/products/{id}(id=${editId})}" th:object="${productForm}" method="post" class="card" style="max-width:520px;padding:1.25rem;">
+    <div class="row">
+      <label>Name</label>
+      <input type="text" th:field="*{name}" required/>
+    </div>
+    <div class="row">
+      <label>Description</label>
+      <textarea th:field="*{description}" rows="3"></textarea>
+    </div>
+    <div class="row">
+      <label>Price</label>
+      <input type="number" step="0.01" min="0" th:field="*{price}" required/>
+    </div>
+    <div class="row">
+      <label>Stock</label>
+      <input type="number" min="0" th:field="*{stock}" required/>
+    </div>
+    <div class="row">
+      <label>Category</label>
+      <select th:field="*{categoryId}" required>
+        <option th:each="c : ${categories.content}" th:value="${c.id}" th:text="${c.name}"></option>
+      </select>
+    </div>
+    <div class="row">
+      <label>Image URL</label>
+      <input type="text" th:field="*{imageUrl}"/>
+    </div>
+    <p class="meta" th:if="${currentStatus != null}" th:text="'Current status: ' + ${currentStatus}"></p>
+    <button class="btn" type="submit">Save changes</button>
+  </form>
+
+  <div th:if="${isEdit}" class="card" style="margin-top:1rem;max-width:520px;padding:1.25rem;">
+    <h2>Quick status</h2>
+    <form th:action="@{/app/seller/products/{id}/status(id=${editId})}" method="post" th:each="st : ${T(com.example.full.auth.and.jwt.model.ProductStatus).values()}" style="display:inline;margin-right:0.35rem;">
+      <button class="btn secondary small" type="submit" name="status" th:value="${st}" th:text="${st}"></button>
+    </form>
+  </div>
+</main>
+</body>
+</html>

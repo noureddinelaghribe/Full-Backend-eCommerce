@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<header class="site-header" th:fragment="navbar">
+  <div class="site-header-inner">
+    <a class="brand" th:href="@{/}">Shop</a>
+    <nav>
+      <ul>
+        <li><a th:href="@{/catalog}">Catalog</a></li>
+        <li th:if="${currentUser != null}"><a th:href="@{/app/cart}">Cart</a></li>
+        <li th:if="${currentUser != null and !isAdmin}"><a th:href="@{/app/orders}">Orders</a></li>
+        <li th:if="${isAdmin}"><a th:href="@{/app/admin/orders}">Orders</a></li>
+        <li th:if="${currentUser != null}"><a th:href="@{/app/addresses}">Addresses</a></li>
+        <li th:if="${currentUser != null}"><a th:href="@{/app/profile}">Profile</a></li>
+        <li th:if="${isSeller}"><a th:href="@{/app/seller/products}">My products</a></li>
+        <li th:if="${isAdmin}"><a th:href="@{/app/admin/users}">Users</a></li>
+        <li th:if="${isAdmin}"><a th:href="@{/app/admin/categories}">Categories</a></li>
+        <li th:if="${currentUser == null}"><a th:href="@{/login}">Login</a></li>
+        <li th:if="${currentUser == null}"><a th:href="@{/register}">Register</a></li>
+        <li th:if="${currentUser != null}">
+          <form class="inline" th:action="@{/logout}" method="post">
+            <button type="submit" class="btn secondary small">Logout</button>
+          </form>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+</body>
+</html>

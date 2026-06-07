@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title th:text="${isEdit} ? 'Edit address' : 'New address'">Address</title>
+  <link rel="stylesheet" th:href="@{/css/app.css}"/>
+</head>
+<body>
+<div th:replace="~{fragments/nav :: navbar}"></div>
+<main>
+  <h1 th:text="${isEdit} ? 'Edit address' : 'New address'">Address</h1>
+  <p class="meta"><a th:href="@{/app/addresses}">← Back</a></p>
+
+  <form th:if="${!isEdit}" th:action="@{/app/addresses}" th:object="${addressForm}" method="post" class="card" style="max-width:480px;padding:1.25rem;">
+    <div class="row">
+      <label>Street</label>
+      <input type="text" th:field="*{street}" required/>
+    </div>
+    <div class="row">
+      <label>City</label>
+      <input type="text" th:field="*{city}" required/>
+    </div>
+    <div class="row">
+      <label>State</label>
+      <input type="text" th:field="*{state}" required/>
+    </div>
+    <div class="row">
+      <label>Country</label>
+      <input type="text" th:field="*{country}" required/>
+    </div>
+    <div class="row">
+      <label><input type="checkbox" th:field="*{isDefault}"/> Default shipping address</label>
+    </div>
+    <button class="btn" type="submit">Save</button>
+  </form>
+
+  <form th:if="${isEdit}" th:action="@{/app/addresses/{id}(id=${editId})}" th:object="${addressForm}" method="post" class="card" style="max-width:480px;padding:1.25rem;">
+    <div class="row">
+      <label>Street</label>
+      <input type="text" th:field="*{street}" required/>
+    </div>
+    <div class="row">
+      <label>City</label>
+      <input type="text" th:field="*{city}" required/>
+    </div>
+    <div class="row">
+      <label>State</label>
+      <input type="text" th:field="*{state}" required/>
+    </div>
+    <div class="row">
+      <label>Country</label>
+      <input type="text" th:field="*{country}" required/>
+    </div>
+    <div class="row">
+      <label><input type="checkbox" th:field="*{isDefault}"/> Default shipping address</label>
+    </div>
+    <button class="btn" type="submit">Update</button>
+  </form>
+</main>
+</body>
+</html>

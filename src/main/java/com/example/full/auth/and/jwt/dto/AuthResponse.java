@@ -1,5 +1,6 @@
 package com.example.full.auth.and.jwt.dto;
 
+import com.example.full.auth.and.jwt.model.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -50,7 +51,7 @@ public class AuthResponse {
     /**
      * 🎭 دور المستخدم
      */
-    private String role;
+    private Role role;
 
     /**
      * 💬 رسالة للمستخدم

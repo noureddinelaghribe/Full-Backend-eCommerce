@@ -1,5 +1,6 @@
 package com.example.full.auth.and.jwt.dto;
 
+import com.example.full.auth.and.jwt.model.Role;
 import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -36,7 +37,7 @@ public class UpdateUserRequest {
     /**
      * 🎭 دور المستخدم (اختياري)
      */
-    private String role;
+    private Role role;
 
     /**
      * ✅ حالة التفعيل (اختياري)

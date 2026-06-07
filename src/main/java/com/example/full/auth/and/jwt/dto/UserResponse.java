@@ -1,5 +1,6 @@
 package com.example.full.auth.and.jwt.dto;
 
+import com.example.full.auth.and.jwt.model.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,7 +28,7 @@ public class UserResponse {
     private String email;
     private String fullName;
     private String phoneNumber;
-    private String role;
+    private Role role;
     private Boolean enabled;
     private LocalDateTime createdAt;
 }

@@ -1,6 +1,6 @@
 package com.example.full.auth.and.jwt.dto;
 
-import jakarta.validation.constraints.Min;
+import com.example.full.auth.and.jwt.model.ProductStatus;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,15 +8,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CartRequest {
+public class ProductStatusRequest {
 
-    @NotNull(message = "Quantity is required")
-    @Min(value = 0, message = "Quantity cannot be negative")
-    private Integer quantity;
+    @NotNull(message = "status is required")
+    private ProductStatus status ;
 
 }

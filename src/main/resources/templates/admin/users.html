@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Users</title>
+  <link rel="stylesheet" th:href="@{/css/app.css}"/>
+</head>
+<body>
+<div th:replace="~{fragments/nav :: navbar}"></div>
+<main>
+  <h1>Users</h1>
+  <div class="flash ok" th:if="${message}" th:text="${message}"></div>
+  <div class="flash err" th:if="${error}" th:text="${error}"></div>
+
+  <div class="table-wrap" th:if="${!users.isEmpty()}">
+    <table>
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Email</th>
+        <th>Name</th>
+        <th>Role</th>
+        <th>Enabled</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="u : ${users.content}">
+        <td th:text="${u.id}"></td>
+        <td th:text="${u.email}"></td>
+        <td th:text="${u.fullName}"></td>
+        <td th:text="${u.role}"></td>
+        <td th:text="${u.enabled}"></td>
+        <td>
+          <form class="inline" th:action="@{/app/admin/users/{id}/delete(id=${u.id})}" method="post"
+                th:if="${currentUser != null && currentUser.id != u.id}"
+                onsubmit="return confirm('Delete user?');">
+            <button class="btn danger small" type="submit">Delete</button>
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</main>
+</body>
+</html>

@@ -1,6 +1,5 @@
 package com.example.full.auth.and.jwt.model;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -108,7 +107,9 @@ public class User implements UserDetails {
      * 
      * ملاحظة: يمكن استخدام Enum بدلاً من String
      */
-    private String role;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
 
     /**
      * ✅ حالة تفعيل الحساب
@@ -133,7 +134,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_" + role));
+        return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
     @Override

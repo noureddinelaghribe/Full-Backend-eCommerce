@@ -3,9 +3,13 @@ package com.example.full.auth.and.jwt.service;
 
 import com.example.full.auth.and.jwt.dto.UpdateUserRequest;
 import com.example.full.auth.and.jwt.dto.UserResponse;
+import com.example.full.auth.and.jwt.model.Role;
 import com.example.full.auth.and.jwt.model.User;
 import com.example.full.auth.and.jwt.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -54,13 +58,27 @@ public class UserService {
     private final UserRepository userRepository;
 
     /**
+     * Get current authenticated user
+     */
+    private User getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal() instanceof String) {
+            throw new AccessDeniedException("Authentication required");
+        }
+
+        return (User) authentication.getPrincipal();
+    }
+
+    /**
      * 🔑 التحقق مما إذا كان المستخدم هو مسؤول
      * 
      * @param user المستخدم للتحقق
      * @return true إذا كان المستخدم مسؤولًا، false خلاف ذلك
      */
     private boolean isAdmin(User user) {
-        return user != null && "ADMIN".equals(user.getRole());
+        //return user != null && "ADMIN".equals(user.getRole());
+        return user != null && Role.ROLE_ADMIN.equals(user.getRole());
+
     }
 
     /**
@@ -96,18 +114,17 @@ public class UserService {
      * 
      * @return قائمة بجميع المستخدمين (يمكن أن تكون فارغة)
      */
-    public List<UserResponse> getAllUsers() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User currentUser = (User) authentication.getPrincipal();
+    public Page<UserResponse> getAllUsers(Pageable pageable) {
+
         
         // Only ADMIN can get all users
-        if (!isAdmin(currentUser)) {
-            throw new RuntimeException("Access denied. Only administrators can view all users.");
-        }
+//        if (!isAdmin(currentUser)) {
+//            throw new RuntimeException("Access denied. Only administrators can view all users.");
+//        }
         
-        return userRepository.findAll().stream()
-                .map(this::convertToUserResponse)
-                .collect(Collectors.toList());
+        return userRepository.findAll(pageable)//.stream()
+                .map(this::convertToUserResponse);
+                //.collect(Collectors.toList());
     }
 
     /**
@@ -129,8 +146,7 @@ public class UserService {
                         "المستخدم غير موجود - User not found with id: " + id
                 ));
         
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User currentUser = (User) authentication.getPrincipal();
+        User currentUser = getCurrentUser();
         
         // Check if current user is accessing their own data or is admin
         if (!canAccessUser(currentUser, user)) {
@@ -138,6 +154,12 @@ public class UserService {
         }
         
         return convertToUserResponse(user);
+    }
+
+
+    public User getUserEntityById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
     }
 
     /**
@@ -159,8 +181,7 @@ public class UserService {
                         "المستخدم غير موجود - User not found with id: " + id
                 ));
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User currentUser = (User) authentication.getPrincipal();
+        User currentUser = getCurrentUser();
         
         // Check if current user can update this user's data
         if (!canUpdateUser(currentUser, user)) {
@@ -197,7 +218,7 @@ public class UserService {
         if (request.getPhoneNumber() != null && !request.getPhoneNumber().isEmpty()) {
             user.setPhoneNumber(request.getPhoneNumber());
         }
-        if (request.getRole() != null && !request.getRole().isEmpty()) {
+        if (request.getRole() != null) {
             user.setRole(request.getRole());
         }
         if (request.getEnabled() != null) {
@@ -216,30 +237,53 @@ public class UserService {
      * - تحقق من إذن الحذف (فقط ADMINS يمكنهم الحذف)
      * - تحذفه من قاعدة البيانات
      * 
-     * @param id معرف المستخدم
+     *  id معرف المستخدم
      * @throws RuntimeException إذا لم يتم العثور على المستخدم أو لا يوجد إذن للحذف
      */
-    public void deleteUser(Long id) {
-        if (!userRepository.existsById(id)) {
-            throw new RuntimeException(
-                    "المستخدم غير موجود - User not found with id: " + id
-            );
-        }
-        
+    public UserResponse deleteUser() {
+
         // Check if current user is admin
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User currentUser = (User) authentication.getPrincipal();
+        User currentUser = getCurrentUser();
         
-        if (!isAdmin(currentUser)) {
-            throw new RuntimeException("Access denied. Only administrators can delete users.");
+//        if (!isAdmin(currentUser)) {
+//            throw new RuntimeException("Access denied. Only administrators can delete users.");
+//        }
+        
+        // Don't allow admin to delete themselves
+//        if (id.equals(currentUser.getId())) {
+//            throw new RuntimeException("You cannot delete your own account.");
+//        }
+        currentUser.setEnabled(false);
+
+        User updatedUser = userRepository.save(currentUser);
+        return convertToUserResponse(updatedUser);
+    }
+
+
+    public UserResponse enablelDisableUserById(Long id, UpdateUserRequest request) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException(
+                        "المستخدم غير موجود - User not found with id: " + id
+                ));
+
+        User currentUser = getCurrentUser();
+
+        // Check if current user can update this user's data
+        if (!canUpdateUser(currentUser, user)) {
+            throw new RuntimeException("Access denied. You can only update your own data.");
         }
-        
+
         // Don't allow admin to delete themselves
         if (id.equals(currentUser.getId())) {
             throw new RuntimeException("You cannot delete your own account.");
         }
-        
-        userRepository.deleteById(id);
+
+        if (request.getEnabled() != null) {
+            user.setEnabled(request.getEnabled());
+        }
+
+        User updatedUser = userRepository.save(user);
+        return convertToUserResponse(updatedUser);
     }
 
     /**

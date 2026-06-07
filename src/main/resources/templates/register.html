@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Register</title>
+  <link rel="stylesheet" th:href="@{/css/app.css}"/>
+</head>
+<body>
+<div th:replace="~{fragments/nav :: navbar}"></div>
+<main>
+  <h1>Create account</h1>
+  <div class="flash err" th:if="${error}" th:text="${error}"></div>
+  <form th:action="@{/register}" th:object="${registerForm}" method="post" class="card" style="max-width:420px;padding:1.25rem;">
+    <div class="row">
+      <label for="email">Email</label>
+      <input id="email" type="email" th:field="*{email}" required/>
+      <div class="error-field" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+    </div>
+    <div class="row">
+      <label for="password">Password</label>
+      <input id="password" type="password" th:field="*{password}" required/>
+      <div class="error-field" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+    </div>
+    <div class="row">
+      <label for="fullName">Full name</label>
+      <input id="fullName" type="text" th:field="*{fullName}" required/>
+      <div class="error-field" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"></div>
+    </div>
+    <div class="row">
+      <label for="phoneNumber">Phone</label>
+      <input id="phoneNumber" type="text" th:field="*{phoneNumber}" required/>
+      <div class="error-field" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></div>
+    </div>
+    <div class="row">
+      <label for="role">Account type</label>
+      <select id="role" th:field="*{role}">
+        <option th:each="r : ${T(com.example.full.auth.and.jwt.model.Role).values()}"
+                th:value="${r}" th:text="${r}"></option>
+      </select>
+    </div>
+    <button class="btn" type="submit">Register</button>
+    <p class="meta" style="margin-top:1rem;">Already have an account? <a th:href="@{/login}">Login</a></p>
+  </form>
+</main>
+</body>
+</html>

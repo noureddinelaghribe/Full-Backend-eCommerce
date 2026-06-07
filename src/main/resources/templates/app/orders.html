@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Orders</title>
+  <link rel="stylesheet" th:href="@{/css/app.css}"/>
+</head>
+<body>
+<div th:replace="~{fragments/nav :: navbar}"></div>
+<main>
+  <h1>Your orders</h1>
+  <div class="flash ok" th:if="${message}" th:text="${message}"></div>
+  <div class="flash err" th:if="${error}" th:text="${error}"></div>
+
+  <div class="table-wrap" th:if="${!orders.isEmpty()}">
+    <table>
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Total</th>
+        <th>Status</th>
+        <th>Created</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="o : ${orders.content}">
+        <td th:text="${o.id}"></td>
+        <td th:text="${o.totalAmount}"></td>
+        <td th:text="${o.status}"></td>
+        <td th:text="${o.createdAt}"></td>
+        <td><a class="btn secondary small" th:href="@{/app/orders/{id}(id=${o.id})}">View</a></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="meta" th:if="${orders.isEmpty()}">No orders yet.</p>
+</main>
+</body>
+</html>

@@ -10,7 +10,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * Authentication controller for login and registration
+ * 🔐 AuthController - واجهة REST للمصادقة (تسجيل الدخول والتسجيل)
+ *
+ * الوصف:
+ * - توفر نقطتي نهاية أساسيتين للمستخدمين:
+ *   - /api/auth/login    → تسجيل الدخول وإرجاع JWT
+ *   - /api/auth/register → تسجيل مستخدم جديد وإرجاع JWT
+ * - تعتمد على {@link com.example.full.auth.and.jwt.service.AuthService} لتنفيذ منطق الأعمال
  */
 @RestController
 @RequestMapping("/api/auth")

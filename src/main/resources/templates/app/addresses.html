@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Addresses</title>
+  <link rel="stylesheet" th:href="@{/css/app.css}"/>
+</head>
+<body>
+<div th:replace="~{fragments/nav :: navbar}"></div>
+<main>
+  <h1>Addresses</h1>
+  <div class="flash ok" th:if="${message}" th:text="${message}"></div>
+  <div class="flash err" th:if="${error}" th:text="${error}"></div>
+  <p><a class="btn" th:href="@{/app/addresses/new}">Add address</a></p>
+
+  <div class="table-wrap" th:if="${!addresses.isEmpty()}">
+    <table>
+      <thead>
+      <tr>
+        <th>Street</th>
+        <th>City</th>
+        <th>State</th>
+        <th>Country</th>
+        <th>Default</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="a : ${addresses.content}">
+        <td th:text="${a.street}"></td>
+        <td th:text="${a.city}"></td>
+        <td th:text="${a.state}"></td>
+        <td th:text="${a.country}"></td>
+        <td th:text="${a.isDefault} ? 'Yes' : 'No'"></td>
+        <td>
+          <a class="btn secondary small" th:href="@{/app/addresses/{id}/edit(id=${a.id})}">Edit</a>
+          <form class="inline" th:action="@{/app/addresses/{id}/default(id=${a.id})}" method="post"
+                th:if="${!a.isDefault}">
+            <button class="btn small" type="submit">Set default</button>
+          </form>
+          <form class="inline" th:action="@{/app/addresses/{id}/delete(id=${a.id})}" method="post"
+                onsubmit="return confirm('Delete this address?');">
+            <button class="btn danger small" type="submit">Delete</button>
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="meta" th:if="${addresses.isEmpty()}">No addresses yet. Add one and mark it default for checkout.</p>
+</main>
+</body>
+</html>

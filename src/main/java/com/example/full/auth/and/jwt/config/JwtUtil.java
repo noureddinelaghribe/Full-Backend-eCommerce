@@ -43,8 +43,9 @@ public class JwtUtil {
     /**
      * ⏱️ مدة صلاحية التوكن بالميلي ثانية
      * - الافتراضي: 24 ساعة (86400000 ms)
+     * 10 سنوات ساعة (315360000000 ms)
      */
-    @Value("${jwt.expiration:86400000}")
+    @Value("${jwt.expiration:315360000000}")
     private Long jwtExpiration;
 
     /**

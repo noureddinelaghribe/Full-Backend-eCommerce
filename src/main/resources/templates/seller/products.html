@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>My products</title>
+  <link rel="stylesheet" th:href="@{/css/app.css}"/>
+</head>
+<body>
+<div th:replace="~{fragments/nav :: navbar}"></div>
+<main>
+  <h1>My products</h1>
+  <div class="flash ok" th:if="${message}" th:text="${message}"></div>
+  <div class="flash err" th:if="${error}" th:text="${error}"></div>
+  <p><a class="btn" th:href="@{/app/seller/products/new}">New product</a></p>
+
+  <div class="table-wrap" th:if="${!products.isEmpty()}">
+    <table>
+      <thead>
+      <tr>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Stock</th>
+        <th>Status</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="p : ${products.content}">
+        <td th:text="${p.name}"></td>
+        <td th:text="${p.price}"></td>
+        <td th:text="${p.stock}"></td>
+        <td th:text="${p.status}"></td>
+        <td>
+          <a class="btn secondary small" th:href="@{/app/seller/products/{id}/edit(id=${p.id})}">Edit</a>
+          <form class="inline" th:action="@{/app/seller/products/{id}/delete(id=${p.id})}" method="post"
+                onsubmit="return confirm('Delete product?');">
+            <button class="btn danger small" type="submit">Delete</button>
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="meta" th:if="${products.isEmpty()}">No products yet.</p>
+</main>
+</body>
+</html>

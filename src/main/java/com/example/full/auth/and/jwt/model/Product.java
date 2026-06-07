@@ -9,7 +9,21 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 
 /**
- * Product entity representing products in the system
+ * 🧾 كيان المنتج (Product)
+ *
+ * الوصف:
+ * - يمثل منتج واحد داخل النظام (مثل منتج في متجر إلكتروني)
+ * - يحتوي على بيانات أساسية مثل الاسم، الوصف، السعر، المخزون، وصورة للمنتج
+ * - مرتبط ببائع واحد (User) عن طريق الحقل {@code seller}
+ *
+ * الحقول الرئيسية:
+ * - id: المعرف الفريد للمنتج
+ * - name: اسم المنتج
+ * - description: وصف تفصيلي للمنتج
+ * - price: سعر المنتج
+ * - stock: الكمية المتوفرة في المخزون
+ * - imageUrl: رابط صورة المنتج
+ * - seller: المستخدم (البائع) الذي أضاف هذا المنتج
  */
 @Entity
 @Table(name = "products")
@@ -38,7 +52,18 @@ public class Product {
     @Column(name = "image_url", length = 500)
     private String imageUrl;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private ProductStatus status;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "seller_id", nullable = false)
     private User seller;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+    private boolean deleted = false;
+
 }
